@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Audio API</title>
+</head>
+<body>
+    <h1>welcome</h1>
+    <script>
+        var audioContext = new AudioContext();
+        var context = new AudioContext(),oscillator = context.createOscillator();
+        oscillator.connect(context.destination);
+        oscillator.start(context.currentTime);
+        oscillator.stop(context.currentTime +3);
+
+    </script>
+    
+</body>
+</html>
