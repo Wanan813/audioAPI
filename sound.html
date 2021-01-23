@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sound1</title>
+    <script>
+        function playsound(){
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;//兼容
+            var audioCtx = new AudioContext();
+            var oscillator = audioCtx.createOscillator();//创造音调控制对象
+            var gainNode = audioCtx.createGain();//控制音量控制对象
+            oscillator.connect(gainNode);//音调和音量关联
+            gainNode.connect(audioCtx.destination);//和音频设备关联
+            oscillator.type = 'sine';//波形
+            oscillator.frequency.value = 1046.50;//波形频率
+            gainNode.gain.setValueAtTime(0,audioCtx.currentTime);//先把当前音量调为0
+            gainNode.gain.linearRampToValueAtTime(1,audioCtx.currentTime + 0.01);//在0.01秒内声音音量线性0~1
+            oscillator.start(audioCtx.currentTime);//开始出声
+            //gainNode.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 5);//在5秒内音量有1降到0.001
+            oscillator.stop(audioCtx.currentTime + 10);//秒后声音关闭
+            oscillator.pause(audioCtx.currentTime);
+        }
+    </script>
+</head>
+<body>
+    <button Onclick=javascript:playsound()>Start</button>
+    <br>
+</body>
+</html>
