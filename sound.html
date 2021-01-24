@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.6.4/Pizzicato.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sound1</title>
     <script>
@@ -18,14 +19,74 @@
             gainNode.gain.linearRampToValueAtTime(1,audioCtx.currentTime + 0.01);//在0.01秒内声音音量线性0~1
             oscillator.start(audioCtx.currentTime);//开始出声
             //gainNode.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 5);//在5秒内音量有1降到0.001
-            oscillator.stop(audioCtx.currentTime + 10);//秒后声音关闭
-            oscillator.pause(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 3);//秒后声音关闭
         }
+
+        var sawtoothWave = new Pizzicato.Sound({
+            source:'wave',
+            options: {
+                type:'sawtooth'
+            }
+        });
+        var delay = new Pizzicato.Effects.Delay();
+        sawtoothWave.addEffect(delay);
+        
+        var voice = new Pizzicato.Sound({
+            source:'input',
+            options:{volume:0.8}
+        });
+
+        var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
+            frequency: 400,
+            peak: 10
+        });
+        sound.addEffect(lowPassFilter);
+        sound.play();
+
+
+
+
+        var target = document.getElementById('minimal-left-2')
+        var input = document.getElementById('change')
+        var text = document.getElementById('minimal-left-2-text')
+        var scape = new ScapeRange({
+        target: target,
+        theme: 'minimal',
+        min: 10,
+        max: 100,
+        targetInput: input, // 绑定的 input
+        value: 20 // 初始值 20
+        })
+        scape.on('change', function (){
+        text.innerHTML = this.val()
+        })
+        scape.trigger('change');
+        setTimeout(function() {
+        scape.val(30).trigger('change') // val(value) 不会触发 change，如果需要触发，请 trigger('change')
+        }, 1000)
+
+
+        
+
     </script>
+    <style>
+
+
+
+    </style>
     
 </head>
 <body>
-    <button Onclick=javascript:playsound()>Start</button>
+    <button onclick=javascript:playsound()>Start</button>
     <br>
+    <button onclick="javascript:sawtoothWave.play()">newsound</button>
+    <button onclick="javascript:sawtoothWave.pause()">pause</button>
+    <br>
+    <button onclick="javascript:lowPassFilter.play()">change</button>
+    <audio src="song.mp3" id=""></audio>
+    <input type="range" min="10" max="22050" step="1" value="10" id="change>
+
+
+
 </body>
 </html>

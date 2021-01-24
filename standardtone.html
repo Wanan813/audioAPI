@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.phpied.com/files/webaudio/osci.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width">
+	<title>oscillator.js</title>
+	<style>
+	body {
+    -webkit-user-select: none;
+	}
+	</style>
+</head>
+<body>
+
+    <button onmousedown="play(440)" onmouseup="stop()" ontouchstart="play(440)" ontouchend="stop()">440</button>
+    <button onmousedown="play(880)" onmouseup="stop()" ontouchstart="play(880)" ontouchend="stop()">880</button>
+    <br>
+    <input type="range" id="frequ" max="20000" min="20" onmousedown="playrange()" onmouseup="stop()">
+    <input placeholder="gimme a number"><button onmousedown="play(this.previousSibling.value)" onmouseup="stop()" ontouchstart="play(this.previousSibling.value)" ontouchend="stop()">you try</button>
+    <br>
+    <button onmousedown="cmajor.yo()" onmouseup="cmajor.no()" ontouchstart="cmajor.yo(440)" ontouchend="cmajor.no()">C major chord</button>
+    <pre id="log"></pre>
+    <script>
+
+    var audio_context, oscillator;
+
+    function stop() {
+        oscillator.stop(0);
+        fire('stop');
+    }
+
+    var getfreq = document.getElementById('frequ');
+    function playrange(getfreq){
+        oscillator = audio_context.createOscillator();
+        oscillator.frequency.value = getfreq;
+        oscillator.connect(audio_context.destination);
+        oscillator.start(0);
+        fire('play', oscillator.frequency.value);
+    }
+
+    function play(freq) {
+        oscillator = audio_context.createOscillator();
+        oscillator.frequency.value = freq;
+        oscillator.connect(audio_context.destination);
+        oscillator.start(0);
+        fire('play', oscillator.frequency.value);
+    }
+
+    var cmajor = {};
+    cmajor.yo = function () {
+        var oscs = [], o, i, freqs = [261.63, 329.63, 392];
+        freqs.forEach(function(freq) {
+            o = audio_context.createOscillator();
+            o.frequency.value = freq;
+            o.connect(audio_context.destination);
+            o.start(0);
+            oscs.push(o);
+    });
+    this.oscs = oscs;
+    fire('play', '\n - ' + freqs.join('Hz\n - '));
+    };
+
+    cmajor.no = function () {
+    this.oscs.forEach(function(o) {
+        o.stop(0);
+    });
+    fire('stop');
+    };
+
+    function fire(e, data) {
+        if (e === 'stop') {
+            log.innerHTML = '';
+        }
+        if (e === 'play') {
+            log.innerHTML = "Playing " + data + 'Hz';
+        }
+    }
+
+    (function init(g){
+    try {
+        audio_context = new (g.AudioContext || g.webkitAudioContext);
+        oscillator = audio_context.createOscillator();
+    } catch (e) {
+        alert('No web audio oscillator support in this browser');
+    }
+    }(window));
+    </script>
+
+<p><a href="https://www.phpied.com/webaudio-oscillator-in-js">blog post</a>
+
+
+</p></body></html>
