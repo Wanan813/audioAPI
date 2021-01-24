@@ -15,11 +15,13 @@
     <button onmousedown="play(440)" onmouseup="stop()" ontouchstart="play(440)" ontouchend="stop()">440</button>
     <button onmousedown="play(880)" onmouseup="stop()" ontouchstart="play(880)" ontouchend="stop()">880</button>
     <br>
-    <input type="range" id="frequ" max="20000" min="20" onmousedown="playrange()" onmouseup="stop()">
-    <input placeholder="gimme a number"><button onmousedown="play(this.previousSibling.value)" onmouseup="stop()" ontouchstart="play(this.previousSibling.value)" ontouchend="stop()">you try</button>
+    <input type="range" id="range" max="20000" min="20" value="10000" step="5"><button onmousedown="play(this.previousSibling.value)" onmouseup="stop()" ontouchstart="play(this.previousSibling.value)" ontouchend="stop()">you try</button>
     <br>
     <button onmousedown="cmajor.yo()" onmouseup="cmajor.no()" ontouchstart="cmajor.yo(440)" ontouchend="cmajor.no()">C major chord</button>
     <pre id="log"></pre>
+
+    <input type="range" id="change" max="20000" min="20" value="10000" step="5"><button onclick=""></button>
+
     <script>
 
     var audio_context, oscillator;
@@ -29,14 +31,7 @@
         fire('stop');
     }
 
-    var getfreq = document.getElementById('frequ');
-    function playrange(getfreq){
-        oscillator = audio_context.createOscillator();
-        oscillator.frequency.value = getfreq;
-        oscillator.connect(audio_context.destination);
-        oscillator.start(0);
-        fire('play', oscillator.frequency.value);
-    }
+    const freq = document.getElementById('range');
 
     function play(freq) {
         oscillator = audio_context.createOscillator();
@@ -86,7 +81,4 @@
     }(window));
     </script>
 
-<p><a href="https://www.phpied.com/webaudio-oscillator-in-js">blog post</a>
-
-
-</p></body></html>
+</body></html>

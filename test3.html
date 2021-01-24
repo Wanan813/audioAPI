@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="result"></div>
+    <div id="dragResult">结果：-</div>
+    <hr />
+    <button id="appendDom">动态添加元素</button>
+    <button id="removeDom">移除元素</button>
+    
+
+    <h3>滑块功能range</h3>
+        <div id="box" style="height: 20px;width: 20px;"></div><br>
+        红:<input type="range" min="0" max="255" value="255" id="red"><span>255</span><br>
+        绿:<input type="range" min="0" max="255" value="255" id="green"><span>255</span><br>
+        蓝:<input type="range" min="0" max="255" value="255" id="blue"><span>255</span><br>
+
+    <input type="range" >
+    <script>
+        var  rangelist=document.querySelectorAll('[type="range"]');
+        for(var i=0; i<rangelist.length; i++){
+            //获得当期遍历的值i并赋值给range
+            var range=rangelist[i];
+            range.onchange=function(){ //range.onchange= 当input的值发生改变时触发事件
+                //onchange()事件一般用于用户表单中，例如：当文本框内容发生改变时触发的事件，或者下拉列表框内容发生改变时触发的事件等
+                this.nextElementSibling.innerHTML=this.value;
+                //修改#BOX的背景颜色
+                changeBoxBG(); //事件监听名
+            };
+        };
+        function changeBoxBG(){  //被监听事件方法属性
+            var R=red.value;
+            var G=green.value;
+            var B=blue.value;
+            box.style.backgroundColor=`RGB(${R},${G},${B})`;
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function(){          
+            var setResult = function(v){
+                if(typeof(v) === "undefined"){
+                    v = "-";
+                }
+                $("#dragResult").html("结果：" + v);
+            };
+            
+            $(document).on("input","#myRange",function(){
+                setResult($(this).val());
+            });
+        
+            $("#removeDom").click(function(){
+                if(!$("#result>#myRange").length){
+                    alert("请先添加元素。");
+                    return;
+                }
+                $("#myRange").remove();
+                setResult();
+            });
+            
+            $("#appendDom").click(function(){
+                if($("#result>#myRange").length){
+                    alert("已经添加过元素了，");
+                    return;
+                }
+                $("#result").append('<input type="range" id="myRange" />');
+                setResult();
+            });
+        });
+    </script>
+</body>
+</html>
