@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Audio API</title>
+
+</head>
+<body>
+    
+    <input type="range" id="change" max="20000" min="20" value="10000" step="5" oninput="play()" onchange="play()"><button onclick="play(this.previousSibling.value)" id="button">you try</button>
+    
+</body>
+<script>
+    var audio_context, oscillator;
+
+    //const freq = document.getElementById('change');
+    var  freq=document.querySelectorAll('[type="range"]');
+    for(var i=0;i<freq.length;i++){
+        var rang=freq[i];
+        rang.onchange=function(){
+            this.nextElementSibling.value=this.value;
+            changefreq();
+        };
+    };
+    function changefreq(){
+        var fr=change.value;
+        button.play().freq=fr;
+    }
+
+
+    function playds(freq) {
+        oscillator = audio_context.createOscillator();
+        oscillator.frequency.value = freq;
+        oscillator.connect(audio_context.destination);
+        oscillator.start(0);
+        fire('play', oscillator.frequency.value);
+    }
+
+
+    function play(freq){
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;//兼容
+        var audioCtx = new AudioContext();
+        var oscillator = audioCtx.createOscillator();//创造音调控制对象
+        var gainNode = audioCtx.createGain();//控制音量控制对象
+        oscillator.connect(gainNode);//音调和音量关联
+        gainNode.connect(audioCtx.destination);//和音频设备关联
+        oscillator.type = 'sine';//波形
+        oscillator.frequency.value = freq;//波形频率
+        oscillator.start(audioCtx.currentTime);//开始出声
+
+    }
+    (function init(g){
+    try {
+        audio_context = new (g.AudioContext || g.webkitAudioContext);
+        oscillator = audio_context.createOscillator();
+    } catch (e) {
+        alert('No web audio oscillator support in this browser');
+    }
+    }(window));
+
+    </script>
+</html>
