@@ -9,6 +9,8 @@
     
     <input id="range" type="range" min="20" max="20000" value="5"step="10" oninput="change()" onchange="change()">
     <span id="value">0</span>
+    <input id="range1" type="range" min="20" max="20000" value="5"step="10" onmousemove="change1()">
+    <span id="value1">0</span>
 <script type='text/javascript'>
     function change() {
         var value = document.getElementById('range').value ;
@@ -24,6 +26,20 @@
         oscillator.frequency.value = value;//波形频率
         oscillator.start(audioCtx.currentTime);//开始出声
 
+    }
+    function change1(){
+        var value = document.getElementById('range1').value ;
+        document.getElementById('value1').innerHTML = value;
+
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;//兼容
+        var audioCtx = new AudioContext();
+        var oscillator = audioCtx.createOscillator();//创造音调控制对象
+        var gainNode = audioCtx.createGain();//控制音量控制对象
+        oscillator.connect(gainNode);//音调和音量关联
+        gainNode.connect(audioCtx.destination);//和音频设备关联
+        oscillator.type = 'sine';//波形
+        oscillator.frequency.value = value;//波形频率
+        oscillator.start(audioCtx.currentTime);//开始出声
     }
 </script>
 

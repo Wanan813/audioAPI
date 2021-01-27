@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        (function(){
+            if (!window.AudioContext) { 
+            alert('当前浏览器不支持Web Audio API');
+            return;
+        }
+        var eleinput = document.getElementById('rang');
+        var audioCtx = new AudioContext();
+        var arrFrequency = document.getElementById('rang').value;
+        eleinput.addEventListener('mousemove',function(){
+            var frequency = arrFrequency;
+
+            var oscillator = audioCtx.createOscillator();
+            // 创建一个GainNode,它可以控制音频的总音量
+            var gainNode = audioCtx.createGain();
+            // 把音量，音调和终节点进行关联
+            oscillator.connect(gainNode);
+            // audioCtx.destination返回AudioDestinationNode对象，表示当前audio context中所有节点的最终节点，一般表示音频渲染设备
+            gainNode.connect(audioCtx.destination);
+            // 指定音调的类型，其他还有square|triangle|sawtooth
+            oscillator.type = 'sine';
+            // 设置当前播放声音的频率，也就是最终播放声音的调调
+            oscillator.frequency.value = frequency;
+            // 当前时间设置音量为0
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            // 0.01秒后音量为1
+            gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.01);
+            // 音调从当前时间开始播放
+            oscillator.start(audioCtx.currentTime);
+        })
+        }
+    
+        )
+        function myfunction(){
+                //var x=document.getElementById("rang").value;
+                var arrFrequency = document.getElementById('rang').value;
+                document.getElementById("text").value=arrFrequency;
+            }
+    </script>
+</head>
+<body>
+    <input type="text" id="text"/><br/>
+    <input type="range" id="rang" min="20" max="20000" step="20" value="400" onmousemove="myfunction()">
+</body>
+
+</html>
